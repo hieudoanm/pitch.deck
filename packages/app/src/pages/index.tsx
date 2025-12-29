@@ -1,40 +1,100 @@
+// Code Editor
+import { yaml as yamlLang } from '@codemirror/lang-yaml';
+import CodeMirror from '@uiw/react-codemirror';
+
+// Components
 import { Navbar } from '@pitch/components/Navbar';
 import {
 	mapYamlToSlides,
 	SlidePreview,
 } from '@pitch/components/SlidePreview/SlidePreview';
 import { Toast, useToast } from '@pitch/components/Toast';
+
+// Utils
 import { labToHex } from '@pitch/utils/colors';
 import { applyExportSafeColors, inlineTailwindStyles } from '@pitch/utils/dom';
 import { logger } from '@pitch/utils/logger';
 import { validate } from '@pitch/utils/yaml';
+
+// HTML to PDF
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+
 import { NextPage } from 'next';
 import { useEffect, useMemo, useState } from 'react';
 import yaml from 'yaml';
 
-const CONTENT = `title:
-  product: InvoiceMate
-  tagline: Simple invoicing for indie founders
-  audience: Indie founders & freelancers
+const CONTENT = `
+title:
+  product: PitchDeckGen
+  tagline: Create stunning pitch decks in minutes
+  audience: Startup founders & entrepreneurs, early-stage startups, and solo founders
 
-problem:
-  - Creating invoices is slow and repetitive
-  - Existing tools are bloated and expensive
+problems:
+  - emoji: ⏱️
+    title: Time-consuming slide creation
+    description: Creating slides manually takes hours, slowing down fundraising and pitch preparation.
+    impact: Delays investor meetings and reduces productivity
+    severity: high
+    userType: founders
+  - emoji: 🛠️
+    title: Complex or generic tools
+    description: Existing tools are either too complex for beginners or too generic for tailored presentations.
+    impact: Users spend extra time learning software or end up with generic slides
+    severity: medium
+    userType: early-stage startups
+  - emoji: 🎨
+    title: Design challenges for non-designers
+    description: Non-designers struggle to make slides visually appealing, leading to inconsistent or unprofessional decks.
+    impact: Pitch decks fail to capture attention or communicate value effectively
+    severity: high
+    userType: solo founders, small teams
 
-solution:
-  description: A lightweight invoice generator that connects to Stripe and exports PDFs in one click.
+solutions:
+  - step: 1
+    emoji: 📝
+    title: Input your idea
+    description: Add your key points, company info, and metrics to outline your pitch.
+  - step: 2
+    emoji: 📤
+    title: Export
+    description: Export your deck to PDF, PowerPoint, or Google Slides for presentations.
+  - step: 3
+    emoji: 🔗
+    title: Share
+    description: Share your deck with investors, team members, or collaborators easily.
 
 product:
   features:
-    - Create invoices in under 30 seconds
-    - Stripe sync
-    - Clean professional templates
+    - emoji: 🤖
+      title: AI-assisted slide creation
+      description: Turn simple prompts into professional slides instantly.
+    - emoji: 🎨
+      title: Customizable templates
+      description: Adjust colors, fonts, and layout to match your brand.
+    - emoji: 📤
+      title: Export to multiple formats
+      description: Export your pitch deck to PDF, PowerPoint, or Google Slides.
 
-businessModel:
-  pricing: $9/month
-  model: Subscription SaaS
+pricing:
+  model: one-time
+  currency: USD
+
+  plans:
+    - name: Free
+      amount: 0.00
+      frequency: free
+      description: Create and export your first pitch deck at no cost
+
+    - name: Pay As You Go
+      amount: 1.99
+      frequency: per deck
+      description: Pay only when you export a new pitch deck
+
+    - name: Lifetime
+      amount: 9.99
+      frequency: one-time
+      description: Unlimited pitch decks with a single payment
 `;
 
 const getInitialInput = () => {
@@ -46,8 +106,12 @@ const getInitialInput = () => {
 const HomePage: NextPage = () => {
 	const { toasts, show, dismiss } = useToast();
 
-	const [{ input }, setState] = useState<{ input: string }>({
+	const [{ input, showInput }, setState] = useState<{
+		input: string;
+		showInput: boolean;
+	}>({
 		input: getInitialInput(),
+		showInput: true,
 	});
 
 	// Sync YAML → URL (shareable link)
@@ -218,39 +282,68 @@ const HomePage: NextPage = () => {
 			{toasts && <Toast toasts={toasts} onDismiss={dismiss} />}
 			<div className="bg-base-200 flex h-screen w-screen flex-col overflow-hidden">
 				<Navbar />
-				<div className="grow overflow-hidden">
-					<div className="divide-base-300 grid h-full w-full grid-cols-3 divide-x">
-						{/* YAML input */}
-						<div className="col-span-1 h-full">
-							<textarea
-								id="input"
-								name="input"
-								placeholder="Input YAML"
-								className="bg-base-100 h-full w-full p-8 font-mono text-sm focus:outline-none"
-								value={input}
-								onChange={(event) => {
-									setState({ input: event.target.value });
-								}}
-							/>
+				<div className="h-full grow overflow-hidden">
+					<div className="divide-base-300 grid h-full w-full grid-cols-24 divide-x">
+						<div className="col-span-1 flex h-full flex-col items-center justify-start gap-4 p-4">
+							{/* Toggle YAML */}
+							<div
+								className="tooltip tooltip-right"
+								data-tip={showInput ? 'Hide YAML Editor' : 'Show YAML Editor'}>
+								<button
+									className="btn btn-primary btn-xs"
+									onClick={() =>
+										setState((previous) => ({
+											...previous,
+											showInput: !previous.showInput,
+										}))
+									}>
+									📝
+								</button>
+							</div>
+
+							{/* Export PDF */}
+							<div className="tooltip tooltip-right" data-tip="Export PDF">
+								<button
+									className="btn btn-secondary btn-xs"
+									disabled={!parsed.data || parsed.errors.length > 0}
+									onClick={exportPDF}>
+									📄
+								</button>
+							</div>
+
+							{/* Copy Shareable Link */}
+							<div
+								className="tooltip tooltip-right"
+								data-tip="Copy Shareable Link">
+								<button className="btn btn-accent btn-xs" onClick={shareURL}>
+									🔗
+								</button>
+							</div>
 						</div>
 
+						{/* YAML input */}
+						{showInput && (
+							<div className="col-span-11 h-full overflow-auto">
+								<div className="bg-base-100 border-base-300 h-full">
+									<CodeMirror
+										value={input}
+										height="100%"
+										className="h-full"
+										extensions={[yamlLang()]}
+										onChange={(value) =>
+											setState((prev) => ({ ...prev, input: value }))
+										}
+										theme="dark"
+									/>
+								</div>
+							</div>
+						)}
+
 						{/* Slides preview */}
-						<div className="col-span-2 overflow-hidden">
+						<div
+							className={`${showInput ? 'col-span-12' : 'col-span-23'} overflow-hidden`}>
 							<div className="h-full w-full overflow-auto p-8">
 								<div className="flex flex-col gap-y-8">
-									<div className="flex justify-start gap-x-8">
-										<button className="btn btn-accent" onClick={shareURL}>
-											🔗 Copy Shareable Link
-										</button>
-
-										<button
-											className="btn btn-primary"
-											disabled={!parsed.data || parsed.errors.length > 0}
-											onClick={exportPDF}>
-											📄 Export PDF
-										</button>
-									</div>
-
 									{!parsed && (
 										<div className="alert alert-error">Invalid YAML</div>
 									)}

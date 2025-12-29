@@ -1,173 +1,202 @@
 import { PitchDeck, SlideLayout } from '@pitch/types/pitch.types';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
+import { CenterBlock, TextBlock } from '../Block';
+import { formatCurrency } from '@pitch/utils/number';
 
 export const mapYamlToSlides = (data: PitchDeck): SlideLayout[] => [
 	{
-		kicker: 'Product',
-		title: data.title.product,
+		kicker: 'Introduction',
 		blocks: [
-			{ type: 'subtitle', text: data.title.tagline },
-			{ type: 'text', text: data.title.audience },
+			{
+				type: 'center',
+				blocks: [
+					{ type: 'title', text: data.title.product },
+					{ type: 'subtitle', text: data.title.tagline },
+					{ type: 'text', text: data.title.audience },
+				],
+			},
 		],
 	},
 	{
-		kicker: 'Problem',
-		title: 'Problem',
-		blocks: [{ type: 'bullets', items: data.problem }],
+		kicker: 'Problems',
+		blocks: [
+			{ type: 'title', text: 'Issues' },
+			{
+				type: 'bullets',
+				items: data.problems.map((p) => ({
+					emoji: p.emoji,
+					title: p.title,
+					description: p.description,
+				})),
+			},
+		],
 	},
 	{
 		kicker: 'Solution',
-		title: 'Solution',
-		blocks: [{ type: 'text', text: data.solution.description }],
+		blocks: [
+			{ type: 'title', text: 'Steps' },
+			{
+				type: 'bullets',
+				items: data.solutions.map((step) => ({
+					emoji: step.emoji,
+					title: step.title,
+					description: step.description,
+				})),
+			},
+		],
 	},
 	{
 		kicker: 'Product',
-		title: 'Product',
-		blocks: [{ type: 'bullets', items: data.product.features }],
+		blocks: [
+			{ type: 'title', text: 'Features' },
+			{
+				type: 'bullets',
+				items: data.product.features.map((feature) => ({
+					emoji: feature.emoji,
+					title: feature.title,
+					description: feature.description,
+				})),
+			},
+		],
 	},
 	{
-		kicker: 'Business Model',
-		title: 'Pricing',
+		kicker: 'Pricing Model',
 		blocks: [
 			{
-				type: 'highlight',
-				left: data.businessModel.pricing,
-				right: data.businessModel.model,
+				type: 'center',
+				blocks: [
+					{ type: 'title', text: 'Pricing Plans' },
+					...data.pricing.plans.map((plan) => ({
+						type: 'pricing-plan' as const,
+						name: plan.name,
+						price: formatCurrency(plan.amount, data.pricing.currency),
+						frequency: plan.frequency,
+					})),
+				],
 			},
 		],
 	},
 ];
+
+const Text: FC<{ children: ReactNode }> = ({ children }) => {
+	return (
+		<pre className="m-0 inline pb-8 break-words whitespace-pre-wrap">
+			{children}
+		</pre>
+	);
+};
 
 export const SlidePreview: FC<{ slide: SlideLayout; index: number }> = ({
 	slide,
 	index,
 }) => {
 	return (
-		<div
-			className="group relative aspect-video h-[720px] w-[1280px] cursor-default border p-[56px] shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
-			style={{ borderColor: '#4B5563', backgroundColor: '#111827' }} // gray-700 / gray-900
-		>
+		<div className="group bg-base-100 border-base-100 relative aspect-video h-[720px] w-[1280px] cursor-default border p-14 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
 			{/* hover gradient overlay */}
-			<div
-				className="pointer-events-none absolute inset-0 opacity-5 transition-opacity group-hover:opacity-20"
-				style={{
-					background: 'linear-gradient(to bottom right, #8B5CF6, transparent)',
-				}} // purple-500
-			/>
+			<div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-purple-500 to-transparent opacity-0 transition-opacity group-hover:opacity-20" />
 
-			{/* slide index */}
-			<div
-				className="absolute top-[24px] right-[24px] font-mono text-[12px]"
-				style={{
-					color: '#9CA3AF',
-					whiteSpace: 'normal',
-					wordBreak: 'break-word',
-				}} // gray-400
-			>
-				{index + 1} / 5
+			<div className="flex items-start justify-between">
+				{/* kicker */}
+				{slide.kicker && (
+					<div className="text-secondary mb-8 text-lg font-semibold uppercase">
+						<Text>{slide.kicker}</Text>
+					</div>
+				)}
+				{/* slide index */}
+				<div className="text-base-content font-mono text-lg">
+					<Text>{index + 1} / 5</Text>
+				</div>
 			</div>
 
-			{/* kicker */}
-			{slide.kicker && (
-				<div
-					className="mb-[16px] text-[12px] font-semibold uppercase"
-					style={{
-						color: '#A78BFA',
-						whiteSpace: 'normal',
-						wordBreak: 'break-word',
-					}} // purple-400
-				>
-					{slide.kicker}
-				</div>
-			)}
-
-			{/* deck title */}
-			{slide.title && (
-				<h2
-					className="mb-[16px] text-[36px] font-bold"
-					style={{
-						color: '#FFFFFF',
-						whiteSpace: 'normal',
-						wordBreak: 'break-word',
-					}}>
-					{slide.title}
-				</h2>
-			)}
-
-			<div className="flex flex-col gap-[24px]">
-				{slide.blocks.map((b, i) => {
-					const textStyle = {
-						whiteSpace: 'normal' as const,
-						wordBreak: 'break-word' as const,
-					};
-					switch (b.type) {
+			<div className="flex h-full flex-col">
+				{slide.blocks.map((block, i) => {
+					switch (block.type) {
 						case 'title':
 							return (
-								<h2
+								<TextBlock
 									key={i}
-									className="text-[36px] font-bold"
-									style={{ color: '#FFFFFF', ...textStyle }}>
-									{b.text}
-								</h2>
+									text={block.text}
+									className="text-base-content mb-8 text-5xl font-bold"
+								/>
 							);
 
 						case 'subtitle':
 							return (
-								<div
+								<TextBlock
 									key={i}
-									className="text-[24px] font-medium"
-									style={{ color: '#D1D5DB', ...textStyle }}>
-									<pre className="pb-2">{b.text}</pre>
-								</div>
+									text={block.text}
+									className="text-primary mb-8 text-2xl font-semibold"
+								/>
 							);
 
 						case 'text':
 							return (
-								<div
+								<TextBlock
 									key={i}
-									className="max-w-[800px] text-[18px]"
-									style={{ color: '#9CA3AF', ...textStyle }}>
-									<pre className="pb-2">{b.text}</pre>
+									text={block.text}
+									className="text-neutral-content text-2xl"
+								/>
+							);
+
+						case 'center': {
+							const pricingPlans = block.blocks.filter(
+								(b) => b.type === 'pricing-plan'
+							);
+
+							const contentBlocks = block.blocks.filter(
+								(b) => b.type !== 'pricing-plan'
+							);
+
+							return (
+								<div className="-mt-16 flex h-full flex-col items-center justify-center text-center">
+									{/* Text content (title, subtitle, etc.) */}
+									{contentBlocks.map((child, i) => (
+										<CenterBlock key={`text-${i}`} block={child} />
+									))}
+
+									{/* Pricing plans row */}
+									{pricingPlans.length > 0 && (
+										<div className="mt-12 flex items-center justify-center">
+											{pricingPlans.map((plan, i) => (
+												<div key={i} className="flex items-start">
+													<CenterBlock key={plan.frequency} block={plan} />
+
+													{i < pricingPlans.length - 1 && (
+														<span className="text-base-100 mx-12 text-9xl font-light">
+															|
+														</span>
+													)}
+												</div>
+											))}
+										</div>
+									)}
 								</div>
 							);
+						}
 
 						case 'bullets':
 							return (
-								<ul
-									key={i}
-									className="space-y-[16px] pl-[24px] text-[18px]"
-									style={{ color: '#E5E7EB', ...textStyle }}>
-									{b.items.map((item, j) => (
-										<li key={j} className="flex items-start gap-[16px]">
-											<span style={{ color: '#A78BFA', marginTop: '4px' }}>
-												●
-											</span>
-											<pre className="pb-2" style={textStyle}>
-												{item}
-											</pre>
+								<ul key={i} className="space-y-6">
+									{block.items.map((item, j) => (
+										<li key={j} className="flex gap-4">
+											<span className="text-3xl">{item.emoji}</span>
+											<div>
+												<div className="text-base-content text-2xl font-bold">
+													<TextBlock text={item.title ?? ''} />
+												</div>
+												{item.description && (
+													<div className="text-neutral-content text-xl">
+														<TextBlock text={item.description ?? ''} />
+													</div>
+												)}
+											</div>
 										</li>
 									))}
 								</ul>
 							);
 
-						case 'highlight':
-							return (
-								<div
-									key={i}
-									className="flex items-center gap-[24px] rounded-[12px] p-[24px]"
-									style={{ backgroundColor: '#1F2937' }}>
-									<div
-										className="text-[36px] font-extrabold"
-										style={{ color: '#A78BFA', ...textStyle }}>
-										<pre className="pb-2">{b.left}</pre>
-									</div>
-									<div
-										className="text-[18px]"
-										style={{ color: '#9CA3AF', ...textStyle }}>
-										<pre className="pb-2">{b.right}</pre>
-									</div>
-								</div>
-							);
+						default:
+							return null;
 					}
 				})}
 			</div>

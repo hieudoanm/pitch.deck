@@ -3,6 +3,12 @@
 	themes: all;
 }
 
+/* CodeMirror Editor */
+
+.cm-editor {
+	background-color: var(--color-base-100) !important;
+}
+
 /* Toast */
 
 @keyframes toast-in {

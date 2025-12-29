@@ -1,15 +1,36 @@
 // Layout
+// Layout
 
 export type SlideBlock =
 	| { type: 'title'; text: string }
 	| { type: 'subtitle'; text: string }
 	| { type: 'text'; text: string }
-	| { type: 'bullets'; items: string[] }
-	| { type: 'highlight'; left: string; right: string };
+	| {
+			type: 'bullets';
+			items: {
+				emoji?: string;
+				title?: string;
+				description?: string;
+			}[];
+	  }
+	| {
+			type: 'highlight';
+			text?: string;
+			subtext?: string;
+	  }
+	| {
+			type: 'pricing-plan';
+			name: string;
+			price: string;
+			frequency: string;
+	  }
+	| {
+			type: 'center';
+			blocks: SlideBlock[];
+	  };
 
 export type SlideLayout = {
 	kicker?: string;
-	title?: string;
 	blocks: SlideBlock[];
 };
 
@@ -21,27 +42,52 @@ export type TitleSlide = {
 	audience: string;
 };
 
-export type ProblemSlide = string[];
+export type Problem = {
+	emoji: string;
+	title: string;
+	description: string;
+	impact: string;
+	severity: string;
+	userType: string;
+};
 
-export type SolutionSlide = {
+export type ProblemsSlide = Problem[];
+
+export type Step = {
+	step: number;
+	emoji: string;
+	title: string;
 	description: string;
 };
 
+export type SolutionSlide = Step[];
+
+export type Feature = { emoji: string; title: string; description: string };
+
 export type ProductSlide = {
-	features: string[];
+	features: Feature[];
 };
 
-export type BusinessModelSlide = {
-	pricing: string;
-	model: 'Subscription' | 'One-time' | 'Freemium' | string;
+export type PricingPlan = {
+	name: string;
+	amount: number;
+	frequency: 'one-time' | 'month' | 'year';
+	description?: string;
+	features?: string[];
+};
+
+export type PricingSlide = {
+	model: 'one-time' | 'subscription' | 'freemium' | 'usage-based';
+	currency: string;
+	plans: PricingPlan[];
 };
 
 // Overall
 
 export type PitchDeck = {
 	title: TitleSlide;
-	problem: ProblemSlide;
-	solution: SolutionSlide;
+	problems: ProblemsSlide;
+	solutions: SolutionSlide;
 	product: ProductSlide;
-	businessModel: BusinessModelSlide;
+	pricing: PricingSlide;
 };
