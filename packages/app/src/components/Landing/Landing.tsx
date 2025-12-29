@@ -16,10 +16,12 @@ export const Landing: FC<{ data: PitchDeck }> = ({ data }) => {
 			<section className="bg-base-200 py-16 sm:py-20 lg:py-24">
 				<div className="mx-auto max-w-4xl px-4 text-center">
 					<h1 className="mb-6 text-3xl font-bold sm:text-4xl lg:text-5xl">
-						{title.product}
+						{title?.product ?? ''}
 					</h1>
-					<p className="mb-4 text-lg opacity-80 sm:text-xl">{title.tagline}</p>
-					<p className="mb-8 opacity-70">Built for {title.audience}</p>
+					<p className="mb-4 text-lg opacity-80 sm:text-xl">
+						{title?.tagline ?? ''}
+					</p>
+					<p className="mb-8 opacity-70">Built for {title?.audience ?? ''}</p>
 
 					<Link href="/app">
 						<button className="btn btn-primary btn-lg w-full sm:w-auto">
@@ -32,18 +34,20 @@ export const Landing: FC<{ data: PitchDeck }> = ({ data }) => {
 			{/* ================= PROBLEMS ================= */}
 			<section className="py-16 sm:py-20">
 				<div className="mx-auto max-w-6xl px-4">
-					<h2 className="mb-6 text-center text-2xl font-bold sm:text-3xl lg:text-4xl">
-						{problems.title}
-					</h2>
+					{problems?.title && (
+						<h2 className="mb-6 text-center text-2xl font-bold sm:text-3xl lg:text-4xl">
+							{problems?.title ?? ''}
+						</h2>
+					)}
 
-					{problems.subtitle && (
+					{problems?.subtitle && (
 						<p className="mb-12 text-center text-base opacity-70 sm:text-lg">
 							{problems.subtitle}
 						</p>
 					)}
 
 					<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-						{problems.items.map((p, i) => (
+						{(problems?.items ?? []).map((p, i) => (
 							<div
 								key={i}
 								className="card border-base-300 bg-base-200 border shadow-xl">
@@ -70,18 +74,20 @@ export const Landing: FC<{ data: PitchDeck }> = ({ data }) => {
 			{/* ================= SOLUTIONS ================= */}
 			<section className="bg-base-200 py-16 sm:py-20">
 				<div className="mx-auto max-w-5xl px-4">
-					<h2 className="mb-6 text-center text-2xl font-bold sm:text-3xl lg:text-4xl">
-						{solutions.title}
-					</h2>
+					{solutions?.title && (
+						<h2 className="mb-6 text-center text-2xl font-bold sm:text-3xl lg:text-4xl">
+							{solutions?.title ?? ''}
+						</h2>
+					)}
 
-					{solutions.subtitle && (
+					{solutions?.subtitle && (
 						<p className="mb-12 text-center text-base opacity-70 sm:text-lg">
 							{solutions.subtitle}
 						</p>
 					)}
 
 					<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-						{solutions.items.map((s, i) => (
+						{(solutions?.items ?? []).map((s, i) => (
 							<div
 								key={i}
 								className="card border-base-300 bg-base-100 border text-center shadow-xl">
@@ -104,18 +110,20 @@ export const Landing: FC<{ data: PitchDeck }> = ({ data }) => {
 			{/* ================= PRODUCT FEATURES ================= */}
 			<section className="py-16 sm:py-20">
 				<div className="mx-auto max-w-6xl px-4">
-					<h2 className="mb-6 text-center text-2xl font-bold sm:text-3xl lg:text-4xl">
-						{product.title}
-					</h2>
+					{product?.title && (
+						<h2 className="mb-6 text-center text-2xl font-bold sm:text-3xl lg:text-4xl">
+							{product?.title ?? ''}
+						</h2>
+					)}
 
-					{product.subtitle && (
+					{product?.subtitle && (
 						<p className="mb-12 text-center text-base opacity-70 sm:text-lg">
-							{product.subtitle}
+							{product?.subtitle ?? ''}
 						</p>
 					)}
 
 					<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-						{product.features.map((f, i) => (
+						{(product?.features ?? []).map((f, i) => (
 							<div
 								key={i}
 								className="card border-base-300 bg-base-200 border shadow-xl">
@@ -133,18 +141,20 @@ export const Landing: FC<{ data: PitchDeck }> = ({ data }) => {
 			{/* ================= PRICING ================= */}
 			<section className="bg-base-200 py-16 sm:py-20">
 				<div className="mx-auto max-w-6xl px-4">
-					<h2 className="mb-6 text-center text-2xl font-bold sm:text-3xl lg:text-4xl">
-						{pricing.title}
-					</h2>
+					{pricing?.title && (
+						<h2 className="mb-6 text-center text-2xl font-bold sm:text-3xl lg:text-4xl">
+							{pricing.title ?? ''}
+						</h2>
+					)}
 
-					{pricing.subtitle && (
+					{pricing?.subtitle && (
 						<p className="mb-12 text-center text-base opacity-70 sm:text-lg">
-							{pricing.subtitle}
+							{pricing.subtitle ?? ''}
 						</p>
 					)}
 
 					<div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
-						{pricing.plans.map((plan, i) => (
+						{(pricing?.plans ?? []).map((plan, i) => (
 							<div key={i} className="card bg-base-100 text-center shadow-lg">
 								<div className="card-body">
 									<h3 className="text-lg font-semibold sm:text-xl">
@@ -152,7 +162,7 @@ export const Landing: FC<{ data: PitchDeck }> = ({ data }) => {
 									</h3>
 
 									<p className="my-4 text-3xl font-bold sm:text-4xl">
-										{formatCurrency(plan.amount, pricing.currency)}
+										{formatCurrency(plan?.amount ?? 0, pricing?.currency ?? '')}
 									</p>
 
 									<p className="mb-2 text-sm opacity-60">{plan.frequency}</p>
@@ -190,7 +200,7 @@ export const Landing: FC<{ data: PitchDeck }> = ({ data }) => {
 			{/* ================= FOOTER ================= */}
 			<footer className="footer footer-center bg-base-300 text-base-content p-6">
 				<aside>
-					<p className="font-semibold">{title.product}</p>
+					<p className="font-semibold">{title?.product}</p>
 					<p className="text-sm opacity-60">
 						© {new Date().getFullYear()} — All rights reserved
 					</p>

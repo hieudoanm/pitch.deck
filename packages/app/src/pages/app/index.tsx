@@ -37,13 +37,14 @@ const getInitialInput = () => {
 const HomePage: NextPage = () => {
 	const { toasts, show, dismiss } = useToast();
 
-	const [{ input, showInput }, setState] = useState<{
-		input: string;
-		showInput: boolean;
-	}>({
-		input: getInitialInput(),
-		showInput: true,
-	});
+	const [{ input = getInitialInput(), showInput = false }, setState] =
+		useState<{
+			input: string;
+			showInput: boolean;
+		}>({
+			input: getInitialInput(),
+			showInput: false,
+		});
 
 	// Sync YAML → URL (shareable link)
 	useEffect(() => {
@@ -200,13 +201,22 @@ const HomePage: NextPage = () => {
 		logger.info('Share link requested 🔗');
 
 		const encoded = encodeURIComponent(input);
-		const url = `${location.origin}?yaml=${encoded}`;
 
+		if (encoded.length > 4000) {
+			logger.error('Shareable link too long ❌', { length: encoded.length });
+			show('error', 'Shareable link is too long to copy (max 4000 chars)');
+			return;
+		}
+
+		const url = `${location.origin}?yaml=${encoded}`;
 		navigator.clipboard.writeText(url);
 
 		logger.success('Shareable link copied 📋', { length: encoded.length });
 		show('success', 'Shareable link copied');
 	};
+
+	const isNotExportable: boolean = !parsed.data || parsed.errors.length > 0;
+	const isSharable: boolean = encodeURIComponent(input).length <= 4000;
 
 	return (
 		<>
@@ -215,13 +225,13 @@ const HomePage: NextPage = () => {
 				<Navbar />
 				<div className="h-full grow overflow-hidden">
 					<div className="divide-primary-content grid h-full w-full grid-cols-24 divide-x">
-						<div className="col-span-1 flex h-full flex-col items-center justify-start gap-4 p-4">
+						<div className="col-span-1 flex h-full flex-col items-center justify-start gap-2 p-2">
 							{/* Toggle YAML */}
 							<div
 								className="tooltip tooltip-right"
 								data-tip={showInput ? 'Hide YAML Editor' : 'Show YAML Editor'}>
 								<button
-									className="btn btn-primary btn-xs"
+									className={`btn btn-xs rounded ${showInput ? 'btn-accent' : 'bg-base-300'}`}
 									onClick={() =>
 										setState((previous) => ({
 											...previous,
@@ -235,8 +245,8 @@ const HomePage: NextPage = () => {
 							{/* Export PDF */}
 							<div className="tooltip tooltip-right" data-tip="Export PDF">
 								<button
-									className="btn btn-secondary btn-xs"
-									disabled={!parsed.data || parsed.errors.length > 0}
+									className="btn btn-xs btn-primary rounded"
+									disabled={isNotExportable}
 									onClick={exportPDF}>
 									📄
 								</button>
@@ -246,7 +256,10 @@ const HomePage: NextPage = () => {
 							<div
 								className="tooltip tooltip-right"
 								data-tip="Copy Shareable Link">
-								<button className="btn btn-accent btn-xs" onClick={shareURL}>
+								<button
+									className="btn btn-xs btn-secondary rounded"
+									disabled={!isSharable}
+									onClick={shareURL}>
 									🔗
 								</button>
 							</div>
@@ -303,11 +316,12 @@ const HomePage: NextPage = () => {
 												<input
 													type="radio"
 													name="pitch_deck_landing_page"
-													className="tab w-1/2"
+													className="checked:border-primary-content tab w-1/2 rounded border transition-all duration-200"
 													aria-label="Pitch Desk"
 													defaultChecked
 												/>
-												<div className="tab-content">
+												{/* Pitch Deck Content */}
+												<div className="tab-content mt-8">
 													<div
 														id="pitch-preview"
 														className="flex flex-col gap-8">
@@ -324,11 +338,12 @@ const HomePage: NextPage = () => {
 												<input
 													type="radio"
 													name="pitch_deck_landing_page"
-													className="tab w-1/2"
+													className="checked:border-primary-content tab w-1/2 rounded border transition-all duration-200"
 													aria-label="Landing Page"
 												/>
-												<div className="tab-content">
-													<div className="border-primary-content overflow-hidden rounded-2xl border shadow-2xl">
+												{/* Landing Page Content */}
+												<div className="tab-content mt-8">
+													<div className="border-primary-content overflow-hidden rounded border shadow-2xl">
 														<Landing data={parsed.data} />
 													</div>
 												</div>

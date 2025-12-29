@@ -10,9 +10,9 @@ export const mapYamlToSlides = (data: PitchDeck): SlideLayout[] => [
 			{
 				type: 'center',
 				blocks: [
-					{ type: 'title', text: data.title.product },
-					{ type: 'subtitle', text: data.title.tagline },
-					{ type: 'text', text: data.title.audience },
+					{ type: 'title', text: data.title?.product ?? '' },
+					{ type: 'subtitle', text: data.title?.tagline ?? '' },
+					{ type: 'text', text: data.title?.audience ?? '' },
 				],
 			},
 		],
@@ -20,11 +20,11 @@ export const mapYamlToSlides = (data: PitchDeck): SlideLayout[] => [
 	{
 		kicker: 'Problems',
 		blocks: [
-			{ type: 'title', text: data.problems.title },
-			{ type: 'subtitle', text: data.problems.subtitle },
+			{ type: 'title', text: data.problems?.title ?? '' },
+			{ type: 'subtitle', text: data.problems?.subtitle ?? '' },
 			{
 				type: 'bullets',
-				items: data.problems.items.map((p) => ({
+				items: (data.problems?.items ?? []).map((p) => ({
 					emoji: p.emoji,
 					title: p.title,
 					description: p.description,
@@ -35,11 +35,11 @@ export const mapYamlToSlides = (data: PitchDeck): SlideLayout[] => [
 	{
 		kicker: 'Solution',
 		blocks: [
-			{ type: 'title', text: data.solutions.title },
-			{ type: 'subtitle', text: data.solutions.subtitle },
+			{ type: 'title', text: data.solutions?.title ?? '' },
+			{ type: 'subtitle', text: data.solutions?.subtitle ?? '' },
 			{
 				type: 'bullets',
-				items: data.solutions.items.map((item) => ({
+				items: (data.solutions?.items ?? []).map((item) => ({
 					emoji: item.emoji,
 					title: item.title,
 					description: item.description,
@@ -50,11 +50,11 @@ export const mapYamlToSlides = (data: PitchDeck): SlideLayout[] => [
 	{
 		kicker: 'Product',
 		blocks: [
-			{ type: 'title', text: data.product.title },
-			{ type: 'subtitle', text: data.product.subtitle },
+			{ type: 'title', text: data.product?.title ?? '' },
+			{ type: 'subtitle', text: data.product?.subtitle ?? '' },
 			{
 				type: 'bullets',
-				items: data.product.features.map((feature) => ({
+				items: (data.product?.features ?? []).map((feature) => ({
 					emoji: feature.emoji,
 					title: feature.title,
 					description: feature.description,
@@ -68,13 +68,16 @@ export const mapYamlToSlides = (data: PitchDeck): SlideLayout[] => [
 			{
 				type: 'center',
 				blocks: [
-					{ type: 'title', text: data.pricing.title },
-					{ type: 'subtitle', text: data.pricing.subtitle },
-					...data.pricing.plans.map((plan) => ({
+					{ type: 'title', text: data.pricing?.title ?? '' },
+					{ type: 'subtitle', text: data.pricing?.subtitle ?? '' },
+					...(data.pricing?.plans ?? []).map((plan) => ({
 						type: 'pricing-plan' as const,
-						name: plan.name,
-						price: formatCurrency(plan.amount, data.pricing.currency),
-						frequency: plan.frequency,
+						name: plan?.name ?? '',
+						price: formatCurrency(
+							plan?.amount ?? 0,
+							data?.pricing?.currency ?? ''
+						),
+						frequency: plan?.frequency ?? '',
 					})),
 				],
 			},
@@ -95,7 +98,7 @@ export const SlidePreview: FC<{ slide: SlideLayout; index: number }> = ({
 	index,
 }) => {
 	return (
-		<div className="group bg-base-100 border-base-100 relative aspect-video h-[720px] w-[1280px] cursor-default border p-14 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+		<div className="group bg-base-100 border-primary-content relative mx-auto aspect-video h-[720px] w-[1280px] cursor-default border p-14 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
 			{/* hover gradient overlay */}
 			<div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-purple-500 to-transparent opacity-0 transition-opacity group-hover:opacity-20" />
 

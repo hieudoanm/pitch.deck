@@ -36,65 +36,69 @@ export type SlideLayout = {
 // Content
 
 export type TitleSlide = {
-	product: string;
-	tagline: string;
-	audience: string;
+	product?: string;
+	tagline?: string;
+	audience?: string;
 };
 
 export type Problem = {
-	emoji: string;
-	title: string;
-	description: string;
-	impact: string;
-	severity: string;
-	userType: string;
+	emoji?: string;
+	title?: string;
+	description?: string;
+	impact?: string;
+	severity?: string;
+	userType?: string;
 };
 
 export type ProblemsSlide = {
-	title: string;
-	subtitle: string;
-	items: Problem[];
+	title?: string;
+	subtitle?: string;
+	items?: Problem[];
 };
 
 export type Step = {
-	step: number;
-	emoji: string;
-	title: string;
-	description: string;
+	step?: number;
+	emoji?: string;
+	title?: string;
+	description?: string;
 };
 
-export type SolutionSlide = { title: string; subtitle: string; items: Step[] };
+export type SolutionSlide = {
+	title?: string;
+	subtitle?: string;
+	items?: Step[];
+};
 
-export type Feature = { emoji: string; title: string; description: string };
+export type Feature = { emoji?: string; title?: string; description?: string };
 
 export type ProductSlide = {
-	title: string;
-	subtitle: string;
-	features: Feature[];
+	title?: string;
+	subtitle?: string;
+	features?: Feature[];
 };
 
 export type PricingPlan = {
-	name: string;
-	amount: number;
-	frequency: 'one-time' | 'month' | 'year';
+	name?: string;
+	amount?: number;
+	frequency?: 'one-time' | 'month' | 'year';
 	description?: string;
 	features?: string[];
 };
 
 export type PricingSlide = {
-	title: string;
-	subtitle: string;
-	model: 'one-time' | 'subscription' | 'freemium' | 'usage-based';
-	currency: string;
-	plans: PricingPlan[];
+	title?: string;
+	subtitle?: string;
+	model?: 'one-time' | 'subscription' | 'freemium' | 'usage-based';
+	currency?: string;
+	plans?: PricingPlan[];
 };
 
 // Overall
 
 export type PitchDeck = {
-	title: TitleSlide;
-	problems: ProblemsSlide;
-	solutions: SolutionSlide;
-	product: ProductSlide;
-	pricing: PricingSlide;
+	title?: TitleSlide;
+	problems?: ProblemsSlide;
+	solutions?: SolutionSlide;
+	product?: ProductSlide;
+	pricing?: PricingSlide;
 };
