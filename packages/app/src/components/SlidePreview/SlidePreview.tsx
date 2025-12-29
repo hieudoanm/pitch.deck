@@ -1,5 +1,7 @@
 import { PitchDeck, SlideLayout } from '@pitch/types/pitch.types';
 import { FC, ReactNode } from 'react';
+import { CenterBlock, TextBlock } from '../Block';
+import { formatCurrency } from '@pitch/utils/number';
 
 export const mapYamlToSlides = (data: PitchDeck): SlideLayout[] => [
 	{
@@ -60,11 +62,17 @@ export const mapYamlToSlides = (data: PitchDeck): SlideLayout[] => [
 	{
 		kicker: 'Pricing Model',
 		blocks: [
-			{ type: 'title', text: 'Pricing Plans' },
 			{
-				type: 'highlight',
-				text: `${data.pricing.symbol}${data.pricing.amount}`,
-				subtext: `${data.pricing.frequency}`,
+				type: 'center',
+				blocks: [
+					{ type: 'title', text: 'Pricing Plans' },
+					...data.pricing.plans.map((plan) => ({
+						type: 'pricing-plan' as const,
+						name: plan.name,
+						price: formatCurrency(plan.amount, data.pricing.currency),
+						frequency: plan.frequency,
+					})),
+				],
 			},
 		],
 	},
@@ -101,87 +109,84 @@ export const SlidePreview: FC<{ slide: SlideLayout; index: number }> = ({
 			</div>
 
 			<div className="flex h-full flex-col">
-				{slide.blocks.map((b, i) => {
-					switch (b.type) {
+				{slide.blocks.map((block, i) => {
+					switch (block.type) {
 						case 'title':
 							return (
-								<div
+								<TextBlock
 									key={i}
-									className="text-base-content mb-8 text-5xl leading-tight font-bold">
-									<Text>{b.text}</Text>
-								</div>
+									text={block.text}
+									className="text-base-content mb-8 text-5xl font-bold"
+								/>
 							);
 
 						case 'subtitle':
 							return (
-								<div
+								<TextBlock
 									key={i}
-									className="text-primary mb-8 text-2xl leading-snug font-semibold">
-									<Text>{b.text}</Text>
-								</div>
+									text={block.text}
+									className="text-primary mb-8 text-2xl font-semibold"
+								/>
 							);
 
 						case 'text':
 							return (
-								<div
+								<TextBlock
 									key={i}
-									className="text-neutral-content text-2xl leading-relaxed">
-									<Text>{b.text}</Text>
-								</div>
+									text={block.text}
+									className="text-neutral-content text-2xl"
+								/>
 							);
 
-						case 'center':
+						case 'center': {
+							const pricingPlans = block.blocks.filter(
+								(b) => b.type === 'pricing-plan'
+							);
+
+							const contentBlocks = block.blocks.filter(
+								(b) => b.type !== 'pricing-plan'
+							);
+
 							return (
-								<div
-									key={i}
-									className="-mt-16 flex h-full flex-col items-center justify-center text-center">
-									{b.blocks.map((child, j) => (
-										<div key={j}>
-											{(() => {
-												switch (child.type) {
-													case 'title':
-														return (
-															<div className="text-base-content mb-6 text-6xl leading-tight font-bold">
-																<Text>{child.text}</Text>
-															</div>
-														);
-
-													case 'subtitle':
-														return (
-															<div className="text-primary mb-6 text-3xl font-semibold">
-																<Text>{child.text}</Text>
-															</div>
-														);
-
-													case 'text':
-														return (
-															<div className="text-neutral-content text-xl">
-																<Text>{child.text}</Text>
-															</div>
-														);
-												}
-											})()}
-										</div>
+								<div className="-mt-16 flex h-full flex-col items-center justify-center text-center">
+									{/* Text content (title, subtitle, etc.) */}
+									{contentBlocks.map((child, i) => (
+										<CenterBlock key={`text-${i}`} block={child} />
 									))}
+
+									{/* Pricing plans row */}
+									{pricingPlans.length > 0 && (
+										<div className="mt-12 flex items-center justify-center">
+											{pricingPlans.map((plan, i) => (
+												<div key={i} className="flex items-start">
+													<CenterBlock key={plan.frequency} block={plan} />
+
+													{i < pricingPlans.length - 1 && (
+														<span className="text-base-100 mx-12 text-9xl font-light">
+															|
+														</span>
+													)}
+												</div>
+											))}
+										</div>
+									)}
 								</div>
 							);
+						}
 
 						case 'bullets':
 							return (
-								<ul className="space-y-6">
-									{b.items.map((item, j) => (
-										<li key={j} className="flex items-center items-start gap-4">
-											{/* Emoji */}
+								<ul key={i} className="space-y-6">
+									{block.items.map((item, j) => (
+										<li key={j} className="flex gap-4">
 											<span className="text-3xl">{item.emoji}</span>
-											<div className="flex flex-col gap-2">
-												{/* Title */}
+											<div>
 												<div className="text-base-content text-2xl font-bold">
-													<Text>{item.title}</Text>
+													<TextBlock text={item.title ?? ''} />
 												</div>
-												{/* Description */}
 												{item.description && (
 													<div className="text-neutral-content text-xl">
-														<Text>{item.description}</Text>
+														<TextBlock text={item.description ?? ''} />
 													</div>
 												)}
 											</div>
@@ -190,19 +195,8 @@ export const SlidePreview: FC<{ slide: SlideLayout; index: number }> = ({
 								</ul>
 							);
 
-						case 'highlight':
-							return (
-								<div key={i} className="flex items-start gap-8 pb-8">
-									{/* big number */}
-									<div className="text-primary flex flex-shrink-0 items-baseline gap-2">
-										{b.text && (
-											<span className="text-8xl font-extrabold">{b.text}</span>
-										)}
-										{b.text && b.subtext && <span className="text-6xl">/</span>}
-										{b.subtext && <span className="text-4xl">{b.subtext}</span>}
-									</div>
-								</div>
-							);
+						default:
+							return null;
 					}
 				})}
 			</div>

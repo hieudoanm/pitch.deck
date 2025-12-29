@@ -1,4 +1,5 @@
 // Layout
+// Layout
 
 export type SlideBlock =
 	| { type: 'title'; text: string }
@@ -6,10 +7,27 @@ export type SlideBlock =
 	| { type: 'text'; text: string }
 	| {
 			type: 'bullets';
-			items: { emoji?: string; title?: string; description?: string }[];
+			items: {
+				emoji?: string;
+				title?: string;
+				description?: string;
+			}[];
 	  }
-	| { type: 'highlight'; text: string; subtext: string }
-	| { type: 'center'; blocks: SlideBlock[] };
+	| {
+			type: 'highlight';
+			text?: string;
+			subtext?: string;
+	  }
+	| {
+			type: 'pricing-plan';
+			name: string;
+			price: string;
+			frequency: string;
+	  }
+	| {
+			type: 'center';
+			blocks: SlideBlock[];
+	  };
 
 export type SlideLayout = {
 	kicker?: string;
@@ -50,10 +68,18 @@ export type ProductSlide = {
 	features: Feature[];
 };
 
-export type PricingSlide = {
-	symbol: string;
+export type PricingPlan = {
+	name: string;
 	amount: number;
-	frequency: string;
+	frequency: 'one-time' | 'month' | 'year';
+	description?: string;
+	features?: string[];
+};
+
+export type PricingSlide = {
+	model: 'one-time' | 'subscription' | 'freemium' | 'usage-based';
+	currency: string;
+	plans: PricingPlan[];
 };
 
 // Overall

@@ -244,26 +244,47 @@ const validatePricing = (data: PitchDeck): ValidationError[] => {
 		return errors;
 	}
 
-	if (typeof data.pricing.symbol !== 'string') {
+	// Validate symbol
+	if (typeof data.pricing.currency !== 'string') {
 		errors.push({
 			path: 'pricing.symbol',
-			message: 'Symbol is required',
+			message: 'Pricing symbol is required',
 		});
 	}
 
-	if (typeof data.pricing.amount !== 'number') {
+	// Validate plans
+	if (!Array.isArray(data.pricing.plans) || data.pricing.plans.length === 0) {
 		errors.push({
-			path: 'pricing.amount',
-			message: 'Amount is required',
+			path: 'pricing.plans',
+			message: 'At least one pricing plan is required',
 		});
+		return errors;
 	}
 
-	if (typeof data.pricing.frequency !== 'string') {
-		errors.push({
-			path: 'pricing.frequency',
-			message: 'Frequency is required',
-		});
-	}
+	data.pricing.plans.forEach((plan, index) => {
+		const basePath = `pricing.plans[${index}]`;
+
+		if (typeof plan.name !== 'string') {
+			errors.push({
+				path: `${basePath}.name`,
+				message: 'Plan name is required',
+			});
+		}
+
+		if (typeof plan.amount !== 'number') {
+			errors.push({
+				path: `${basePath}.amount`,
+				message: 'Plan amount must be a number',
+			});
+		}
+
+		if (typeof plan.frequency !== 'string') {
+			errors.push({
+				path: `${basePath}.frequency`,
+				message: 'Plan frequency is required',
+			});
+		}
+	});
 
 	return errors;
 };

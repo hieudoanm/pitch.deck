@@ -77,9 +77,24 @@ product:
       description: Export your pitch deck to PDF, PowerPoint, or Google Slides.
 
 pricing:
-  symbol: $
-  amount: 2.99
-  frequency: One-time
+  model: one-time
+  currency: USD
+
+  plans:
+    - name: Free
+      amount: 0.00
+      frequency: free
+      description: Create and export your first pitch deck at no cost
+
+    - name: Pay As You Go
+      amount: 1.99
+      frequency: per deck
+      description: Pay only when you export a new pitch deck
+
+    - name: Lifetime
+      amount: 9.99
+      frequency: one-time
+      description: Unlimited pitch decks with a single payment
 `;
 
 const getInitialInput = () => {
