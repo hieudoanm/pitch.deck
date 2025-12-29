@@ -1,0 +1,21 @@
+title:
+  product: InvoiceMate
+  tagline: Simple invoicing for indie founders
+  audience: Indie founders & freelancers
+
+problem:
+  - Creating invoices is slow and repetitive
+  - Existing tools are bloated and expensive
+
+solution:
+  description: A lightweight invoice generator that connects to Stripe and exports PDFs in one click.
+
+product:
+  features:
+    - Create invoices in under 30 seconds
+    - Stripe sync
+    - Clean professional templates
+
+businessModel:
+  pricing: $9/month
+  model: Subscription SaaS
