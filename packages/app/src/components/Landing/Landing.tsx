@@ -1,8 +1,8 @@
-import { FC } from 'react';
 import { PitchDeck } from '@pitch/types/pitch.types';
-import Link from 'next/link';
-import { Navbar } from '../Navbar';
 import { formatCurrency } from '@pitch/utils/number';
+import Link from 'next/link';
+import { FC } from 'react';
+import { Navbar } from '../Navbar';
 
 export const Landing: FC<{ data: PitchDeck }> = ({ data }) => {
 	const { title, problems, solutions, product, pricing } = data;
@@ -13,40 +13,40 @@ export const Landing: FC<{ data: PitchDeck }> = ({ data }) => {
 			<Navbar />
 
 			{/* ================= HERO ================= */}
-			<section className="hero bg-base-200 py-24">
-				<div className="hero-content max-w-4xl text-center">
-					<div>
-						<h1 className="mb-6 text-5xl font-bold">{title.product}</h1>
-						<p className="mb-4 text-xl opacity-80">{title.tagline}</p>
-						<p className="mb-8 opacity-70">Built for {title.audience}</p>
-						<div className="flex justify-center gap-4">
-							<Link href="/app">
-								<button className="btn btn-primary btn-lg">
-									Generate your pitch
-								</button>
-							</Link>
-						</div>
-					</div>
+			<section className="bg-base-200 py-16 sm:py-20 lg:py-24">
+				<div className="mx-auto max-w-4xl px-4 text-center">
+					<h1 className="mb-6 text-3xl font-bold sm:text-4xl lg:text-5xl">
+						{title.product}
+					</h1>
+					<p className="mb-4 text-lg opacity-80 sm:text-xl">{title.tagline}</p>
+					<p className="mb-8 opacity-70">Built for {title.audience}</p>
+
+					<Link href="/app">
+						<button className="btn btn-primary btn-lg w-full sm:w-auto">
+							Generate your pitch
+						</button>
+					</Link>
 				</div>
 			</section>
 
 			{/* ================= PROBLEMS ================= */}
-			<section className="py-20">
+			<section className="py-16 sm:py-20">
 				<div className="mx-auto max-w-6xl px-4">
-					<h2 className="mb-12 text-center text-4xl font-bold">
+					<h2 className="mb-6 text-center text-2xl font-bold sm:text-3xl lg:text-4xl">
 						{problems.title}
 					</h2>
+
 					{problems.subtitle && (
-						<p className="mb-12 text-center text-lg opacity-70">
+						<p className="mb-12 text-center text-base opacity-70 sm:text-lg">
 							{problems.subtitle}
 						</p>
 					)}
 
-					<div className="grid gap-8 md:grid-cols-3">
+					<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 						{problems.items.map((p, i) => (
 							<div
 								key={i}
-								className="card bg-base-200 border-base-300 border shadow-2xl">
+								className="card border-base-300 bg-base-200 border shadow-xl">
 								<div className="card-body">
 									<div className="mb-2 text-3xl">{p.emoji}</div>
 									<h3 className="card-title">{p.title}</h3>
@@ -68,28 +68,31 @@ export const Landing: FC<{ data: PitchDeck }> = ({ data }) => {
 			</section>
 
 			{/* ================= SOLUTIONS ================= */}
-			<section className="bg-base-200 py-20">
+			<section className="bg-base-200 py-16 sm:py-20">
 				<div className="mx-auto max-w-5xl px-4">
-					<h2 className="mb-12 text-center text-4xl font-bold">
+					<h2 className="mb-6 text-center text-2xl font-bold sm:text-3xl lg:text-4xl">
 						{solutions.title}
 					</h2>
+
 					{solutions.subtitle && (
-						<p className="mb-12 text-center text-lg opacity-70">
+						<p className="mb-12 text-center text-base opacity-70 sm:text-lg">
 							{solutions.subtitle}
 						</p>
 					)}
 
-					<div className="grid gap-8 md:grid-cols-3">
+					<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 						{solutions.items.map((s, i) => (
 							<div
-								key={`solution-${i}`}
-								className="card bg-base-100 border-base-300 border text-center shadow-2xl">
+								key={i}
+								className="card border-base-300 bg-base-100 border text-center shadow-xl">
 								<div className="card-body">
 									<div className="mb-4 text-4xl">{s.emoji}</div>
 									<span className="badge badge-primary mx-auto mb-2">
 										Step {s.step}
 									</span>
-									<h3 className="text-xl font-semibold">{s.title}</h3>
+									<h3 className="text-lg font-semibold sm:text-xl">
+										{s.title}
+									</h3>
 									<p className="opacity-80">{s.description}</p>
 								</div>
 							</div>
@@ -99,22 +102,23 @@ export const Landing: FC<{ data: PitchDeck }> = ({ data }) => {
 			</section>
 
 			{/* ================= PRODUCT FEATURES ================= */}
-			<section className="py-20">
+			<section className="py-16 sm:py-20">
 				<div className="mx-auto max-w-6xl px-4">
-					<h2 className="mb-12 text-center text-4xl font-bold">
+					<h2 className="mb-6 text-center text-2xl font-bold sm:text-3xl lg:text-4xl">
 						{product.title}
 					</h2>
+
 					{product.subtitle && (
-						<p className="mb-12 text-center text-lg opacity-70">
+						<p className="mb-12 text-center text-base opacity-70 sm:text-lg">
 							{product.subtitle}
 						</p>
 					)}
 
-					<div className="grid gap-8 md:grid-cols-3">
+					<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 						{product.features.map((f, i) => (
 							<div
-								key={`feature-${i}`}
-								className="card bg-base-200 border-base-300 border shadow-2xl">
+								key={i}
+								className="card border-base-300 bg-base-200 border shadow-xl">
 								<div className="card-body">
 									<div className="mb-2 text-3xl">{f.emoji}</div>
 									<h3 className="card-title">{f.title}</h3>
@@ -127,29 +131,33 @@ export const Landing: FC<{ data: PitchDeck }> = ({ data }) => {
 			</section>
 
 			{/* ================= PRICING ================= */}
-			<section className="bg-base-200 py-20">
+			<section className="bg-base-200 py-16 sm:py-20">
 				<div className="mx-auto max-w-6xl px-4">
-					<h2 className="mb-12 text-center text-4xl font-bold">
+					<h2 className="mb-6 text-center text-2xl font-bold sm:text-3xl lg:text-4xl">
 						{pricing.title}
 					</h2>
+
 					{pricing.subtitle && (
-						<p className="mb-12 text-center text-lg opacity-70">
+						<p className="mb-12 text-center text-base opacity-70 sm:text-lg">
 							{pricing.subtitle}
 						</p>
 					)}
 
-					<div className="grid gap-8 md:grid-cols-3">
+					<div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
 						{pricing.plans.map((plan, i) => (
-							<div key={i} className="card bg-base-100 shadow-lg">
-								<div className="card-body text-center">
-									<h3 className="text-xl font-semibold">{plan.name}</h3>
+							<div key={i} className="card bg-base-100 text-center shadow-lg">
+								<div className="card-body">
+									<h3 className="text-lg font-semibold sm:text-xl">
+										{plan.name}
+									</h3>
 
-									<p className="my-4 text-4xl font-bold">
+									<p className="my-4 text-3xl font-bold sm:text-4xl">
 										{formatCurrency(plan.amount, pricing.currency)}
 									</p>
 
-									<p className="mb-6 opacity-60">{plan.frequency}</p>
-									<p className="mb-8 opacity-80">{plan.description}</p>
+									<p className="mb-2 text-sm opacity-60">{plan.frequency}</p>
+
+									<p className="mb-6 opacity-80">{plan.description}</p>
 
 									<button className="btn btn-primary w-full">
 										Get started
@@ -162,16 +170,17 @@ export const Landing: FC<{ data: PitchDeck }> = ({ data }) => {
 			</section>
 
 			{/* ================= CTA ================= */}
-			<section className="py-24">
+			<section className="py-20 sm:py-24">
 				<div className="mx-auto max-w-4xl px-4 text-center">
-					<h2 className="mb-12 text-center text-4xl font-bold">
+					<h2 className="mb-6 text-2xl font-bold sm:text-3xl lg:text-4xl">
 						Ready to impress investors?
 					</h2>
-					<p className="mb-12 text-center text-lg opacity-70">
+					<p className="mb-8 text-base opacity-70 sm:text-lg">
 						Create your pitch deck in minutes — not days.
 					</p>
+
 					<Link href="/app">
-						<button className="btn btn-primary btn-lg">
+						<button className="btn btn-primary btn-lg w-full sm:w-auto">
 							Generate my pitch deck
 						</button>
 					</Link>

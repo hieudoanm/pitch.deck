@@ -14,7 +14,7 @@ export const Navbar: FC = () => {
 	}, [theme]);
 
 	return (
-		<div className="navbar border-base-300 border-b px-6">
+		<div className="navbar border-primary-content border-b px-6 shadow-2xl">
 			<div className="flex-1">
 				<Link href="/">
 					<span className="text-lg font-bold">Pitch Deck Generator</span>
@@ -33,7 +33,7 @@ export const Navbar: FC = () => {
 							return acc;
 						}, {})
 					).map(([group, themes]) => (
-						<optgroup key={group} label={group}>
+						<optgroup key={group} label={`${group} (${themes.length})`}>
 							{themes.map((t) => (
 								<option key={t} value={t}>
 									{t.charAt(0).toUpperCase() + t.slice(1)}

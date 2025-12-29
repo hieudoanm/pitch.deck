@@ -1,31 +1,45 @@
-export const INITIAL_THEME = 'night';
+export const INITIAL_THEME = 'coffee';
 
 export const THEMES: { group: string; theme: string }[] = [
 	// 🌤 Light themes
-	{ group: 'Light', theme: 'light' },
 	{ group: 'Light', theme: 'acid' },
+	{ group: 'Light', theme: 'autumn' },
 	{ group: 'Light', theme: 'bumblebee' },
 	{ group: 'Light', theme: 'corporate' },
 	{ group: 'Light', theme: 'cupcake' },
+	{ group: 'Light', theme: 'cmyk' },
 	{ group: 'Light', theme: 'emerald' },
+	{ group: 'Light', theme: 'fantasy' },
 	{ group: 'Light', theme: 'garden' },
+	{ group: 'Light', theme: 'lemonade' },
+	{ group: 'Light', theme: 'light' },
 	{ group: 'Light', theme: 'lofi' },
+	{ group: 'Light', theme: 'nord' },
 	{ group: 'Light', theme: 'pastel' },
+	{ group: 'Light', theme: 'lemonade' },
+	{ group: 'Light', theme: 'winter' },
 	{ group: 'Light', theme: 'wireframe' },
 
 	// 🌙 Dark themes
+	{ group: 'Dark', theme: 'black' },
+	{ group: 'Dark', theme: 'business' },
 	{ group: 'Dark', theme: 'coffee' },
 	{ group: 'Dark', theme: 'dark' },
-	{ group: 'Dark', theme: 'synthwave' },
+	{ group: 'Dark', theme: 'dim' },
 	{ group: 'Dark', theme: 'dracula' },
+	{ group: 'Dark', theme: 'forest' },
+	{ group: 'Dark', theme: 'halloween' },
 	{ group: 'Dark', theme: 'luxury' },
 	{ group: 'Dark', theme: 'night' },
-	{ group: 'Dark', theme: 'forest' },
+	{ group: 'Dark', theme: 'sunset' },
 
 	// 🎨 Colorful / fun
+	{ group: 'Fun', theme: 'abyss' },
 	{ group: 'Fun', theme: 'aqua' },
 	{ group: 'Fun', theme: 'retro' },
+	{ group: 'Fun', theme: 'caramellatte' },
 	{ group: 'Fun', theme: 'cyberpunk' },
+	{ group: 'Fun', theme: 'synthwave' },
 	{ group: 'Fun', theme: 'valentine' },
 ];
 

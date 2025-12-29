@@ -26,6 +26,7 @@ import jsPDF from 'jspdf';
 import { NextPage } from 'next';
 import { useEffect, useMemo, useState } from 'react';
 import yaml from 'yaml';
+import { Landing } from '@pitch/components/Landing';
 
 const getInitialInput = () => {
 	if (typeof window === 'undefined') return INITIAL_CONTENT;
@@ -213,7 +214,7 @@ const HomePage: NextPage = () => {
 			<div className="bg-base-200 flex h-screen w-screen flex-col overflow-hidden">
 				<Navbar />
 				<div className="h-full grow overflow-hidden">
-					<div className="divide-base-300 grid h-full w-full grid-cols-24 divide-x">
+					<div className="divide-primary-content grid h-full w-full grid-cols-24 divide-x">
 						<div className="col-span-1 flex h-full flex-col items-center justify-start gap-4 p-4">
 							{/* Toggle YAML */}
 							<div
@@ -254,7 +255,7 @@ const HomePage: NextPage = () => {
 						{/* YAML input */}
 						{showInput && (
 							<div className="col-span-11 h-full overflow-auto">
-								<div className="bg-base-100 border-base-300 h-full">
+								<div className="bg-base-100 border-primary-content h-full">
 									<CodeMirror
 										value={input}
 										height="100%"
@@ -298,14 +299,39 @@ const HomePage: NextPage = () => {
 												</div>
 											)}
 
-											<div id="pitch-preview" className="flex flex-col gap-8">
-												{slides.map((slide, i) => (
-													<SlidePreview
-														key={slide.kicker}
-														index={i}
-														slide={slide}
-													/>
-												))}
+											<div className="tabs tabs-box w-full">
+												<input
+													type="radio"
+													name="pitch_deck_landing_page"
+													className="tab w-1/2"
+													aria-label="Pitch Desk"
+													defaultChecked
+												/>
+												<div className="tab-content">
+													<div
+														id="pitch-preview"
+														className="flex flex-col gap-8">
+														{slides.map((slide, i) => (
+															<SlidePreview
+																key={slide.kicker}
+																index={i}
+																slide={slide}
+															/>
+														))}
+													</div>
+												</div>
+
+												<input
+													type="radio"
+													name="pitch_deck_landing_page"
+													className="tab w-1/2"
+													aria-label="Landing Page"
+												/>
+												<div className="tab-content">
+													<div className="border-primary-content overflow-hidden rounded-2xl border shadow-2xl">
+														<Landing data={parsed.data} />
+													</div>
+												</div>
 											</div>
 										</>
 									)}
