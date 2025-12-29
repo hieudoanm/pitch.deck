@@ -1,0 +1,27 @@
+@import 'tailwindcss';
+@plugin 'daisyui' {
+	themes: all;
+}
+
+/* CodeMirror Editor */
+
+.cm-editor {
+	background-color: var(--color-base-100) !important;
+}
+
+/* Toast */
+
+@keyframes toast-in {
+	from {
+		opacity: 0;
+		transform: translateY(12px) scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+.animate-toast-in {
+	animation: toast-in 0.25s ease-out;
+}

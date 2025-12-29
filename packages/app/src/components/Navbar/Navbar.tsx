@@ -1,0 +1,48 @@
+import { INITIAL_THEME, THEMES } from '@pitch/constants/app';
+import Link from 'next/link';
+import { FC, useEffect, useState } from 'react';
+
+export const Navbar: FC = () => {
+	const [theme, setTheme] = useState(() => {
+		if (typeof window === 'undefined') return INITIAL_THEME;
+		return localStorage.getItem('theme') ?? INITIAL_THEME;
+	});
+
+	useEffect(() => {
+		document.documentElement.setAttribute('data-theme', theme);
+		localStorage.setItem('theme', theme);
+	}, [theme]);
+
+	return (
+		<div className="navbar border-primary-content border-b px-6 shadow-2xl">
+			<div className="flex-1">
+				<Link href="/">
+					<span className="text-lg font-bold">Pitch Deck Generator</span>
+				</Link>
+			</div>
+
+			<div className="flex-none">
+				<select
+					className="select select-sm select-bordered bg-base-100"
+					value={theme}
+					onChange={(e) => setTheme(e.target.value)}>
+					{Object.entries(
+						THEMES.reduce<Record<string, string[]>>((acc, t) => {
+							acc[t.group] ??= [];
+							acc[t.group].push(t.theme);
+							return acc;
+						}, {})
+					).map(([group, themes]) => (
+						<optgroup key={group} label={`${group} (${themes.length})`}>
+							{themes.map((t) => (
+								<option key={t} value={t}>
+									{t.charAt(0).toUpperCase() + t.slice(1)}
+								</option>
+							))}
+						</optgroup>
+					))}
+				</select>
+			</div>
+		</div>
+	);
+};
