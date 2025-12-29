@@ -120,7 +120,10 @@ export const SlidePreview: FC<{ slide: SlideLayout; index: number }> = ({
 								<div key={i} className="flex items-start gap-8 pb-8">
 									{/* big number */}
 									<div className="flex flex-shrink-0 items-baseline gap-2 text-purple-400">
-										<span className="text-7xl font-extrabold">{b.text}</span>
+										{b.text && (
+											<span className="text-8xl font-extrabold">{b.text}</span>
+										)}
+										{b.text && b.subtext && <span className="text-6xl">/</span>}
 										{b.subtext && <span className="text-4xl">{b.subtext}</span>}
 									</div>
 								</div>

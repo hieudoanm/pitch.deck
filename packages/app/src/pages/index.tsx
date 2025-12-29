@@ -53,8 +53,12 @@ const getInitialInput = () => {
 const HomePage: NextPage = () => {
 	const { toasts, show, dismiss } = useToast();
 
-	const [{ input }, setState] = useState<{ input: string }>({
+	const [{ input, showInput }, setState] = useState<{
+		input: string;
+		showInput: boolean;
+	}>({
 		input: getInitialInput(),
+		showInput: true,
 	});
 
 	// Sync YAML → URL (shareable link)
@@ -226,38 +230,68 @@ const HomePage: NextPage = () => {
 			<div className="bg-base-200 flex h-screen w-screen flex-col overflow-hidden">
 				<Navbar />
 				<div className="grow overflow-hidden">
-					<div className="divide-base-300 grid h-full w-full grid-cols-3 divide-x">
-						{/* YAML input */}
-						<div className="col-span-1 h-full">
-							<textarea
-								id="input"
-								name="input"
-								placeholder="Input YAML"
-								className="bg-base-100 h-full w-full p-8 font-mono text-sm focus:outline-none"
-								value={input}
-								onChange={(event) => {
-									setState({ input: event.target.value });
-								}}
-							/>
+					<div className="divide-base-300 grid h-full w-full grid-cols-24 divide-x">
+						<div className="col-span-1 flex h-full flex-col items-center justify-start gap-4 p-4">
+							{/* Toggle YAML */}
+							<div
+								className="tooltip tooltip-right"
+								data-tip={showInput ? 'Hide YAML Editor' : 'Show YAML Editor'}>
+								<button
+									className="btn btn-primary btn-xs"
+									onClick={() =>
+										setState((previous) => ({
+											...previous,
+											showInput: !previous.showInput,
+										}))
+									}>
+									📝
+								</button>
+							</div>
+
+							{/* Copy Shareable Link */}
+							<div
+								className="tooltip tooltip-right"
+								data-tip="Copy Shareable Link">
+								<button className="btn btn-secondary btn-xs" onClick={shareURL}>
+									🔗
+								</button>
+							</div>
+
+							{/* Export PDF */}
+							<div className="tooltip tooltip-right" data-tip="Export PDF">
+								<button
+									className="btn btn-accent btn-xs"
+									disabled={!parsed.data || parsed.errors.length > 0}
+									onClick={exportPDF}>
+									📄
+								</button>
+							</div>
 						</div>
 
+						{/* YAML input */}
+						{showInput && (
+							<div className="col-span-11 h-full">
+								<textarea
+									id="input"
+									name="input"
+									placeholder="Input YAML"
+									className="bg-base-100 h-full w-full p-8 font-mono text-sm focus:outline-none"
+									value={input}
+									onChange={(event) => {
+										setState((previous) => ({
+											...previous,
+											input: event.target.value,
+										}));
+									}}
+								/>
+							</div>
+						)}
+
 						{/* Slides preview */}
-						<div className="col-span-2 overflow-hidden">
+						<div
+							className={`${showInput ? 'col-span-12' : 'col-span-23'} overflow-hidden`}>
 							<div className="h-full w-full overflow-auto p-8">
 								<div className="flex flex-col gap-y-8">
-									<div className="flex justify-start gap-x-8">
-										<button className="btn btn-accent" onClick={shareURL}>
-											🔗 Copy Shareable Link
-										</button>
-
-										<button
-											className="btn btn-primary"
-											disabled={!parsed.data || parsed.errors.length > 0}
-											onClick={exportPDF}>
-											📄 Export PDF
-										</button>
-									</div>
-
 									{!parsed && (
 										<div className="alert alert-error">Invalid YAML</div>
 									)}
