@@ -20,27 +20,55 @@ title:
   tagline: Create stunning pitch decks in minutes
   audience: Startup founders & entrepreneurs, early-stage startups, and solo founders
 
-problem:
-  - Designing slides is time-consuming and repetitive
-  - Existing tools are either too complex for beginners or too generic for customization
-  - Non-designers struggle to create visually appealing presentations
-  - Quickly iterating on slides for investors is difficult
+problems:
+  - emoji: ⏱️
+    title: Time-consuming slide creation
+    description: Creating slides manually takes hours, slowing down fundraising and pitch preparation.
+    impact: Delays investor meetings and reduces productivity
+    severity: high
+    userType: founders
+  - emoji: 🛠️
+    title: Complex or generic tools
+    description: Existing tools are either too complex for beginners or too generic for tailored presentations.
+    impact: Users spend extra time learning software or end up with generic slides
+    severity: medium
+    userType: early-stage startups
+  - emoji: 🎨
+    title: Design challenges for non-designers
+    description: Non-designers struggle to make slides visually appealing, leading to inconsistent or unprofessional decks.
+    impact: Pitch decks fail to capture attention or communicate value effectively
+    severity: high
+    userType: solo founders, small teams
 
-solution:
-  description: An AI-powered pitch deck generator that turns your ideas into professional slides instantly, saving time and making your ideas visually compelling.
+solutions:
+  - step: 1
+    emoji: 📝
+    title: Input your idea
+    description: Add your key points, company info, and metrics to outline your pitch.
+  - step: 2
+    emoji: 📤
+    title: Export
+    description: Export your deck to PDF, PowerPoint, or Google Slides for presentations.
+  - step: 3
+    emoji: 🔗
+    title: Share
+    description: Share your deck with investors, team members, or collaborators easily.
 
 product:
   features:
-    - AI-assisted slide creation from simple input prompts
-    - Customizable templates with brand colors and fonts
-    - Export to PDF, PowerPoint, or Google Slides
-    - Automatic layout suggestions for professional design
-    - Drag-and-drop editing for fine-tuning
-    - Pre-built content blocks for common slide types (team, metrics, roadmap)
+    - emoji: 🤖
+      title: AI-assisted slide creation
+      description: Turn simple prompts into professional slides instantly.
+    - emoji: 🎨
+      title: Customizable templates
+      description: Adjust colors, fonts, and layout to match your brand.
+    - emoji: 📤
+      title: Export to multiple formats
+      description: Export your pitch deck to PDF, PowerPoint, or Google Slides.
 
 pricing:
-  symbol: "$"
-  amount: 19
+  symbol: $
+  amount: 2.99
   frequency: One-time
 `;
 
@@ -248,22 +276,22 @@ const HomePage: NextPage = () => {
 								</button>
 							</div>
 
+							{/* Export PDF */}
+							<div className="tooltip tooltip-right" data-tip="Export PDF">
+								<button
+									className="btn btn-secondary btn-xs"
+									disabled={!parsed.data || parsed.errors.length > 0}
+									onClick={exportPDF}>
+									📄
+								</button>
+							</div>
+
 							{/* Copy Shareable Link */}
 							<div
 								className="tooltip tooltip-right"
 								data-tip="Copy Shareable Link">
-								<button className="btn btn-secondary btn-xs" onClick={shareURL}>
+								<button className="btn btn-accent btn-xs" onClick={shareURL}>
 									🔗
-								</button>
-							</div>
-
-							{/* Export PDF */}
-							<div className="tooltip tooltip-right" data-tip="Export PDF">
-								<button
-									className="btn btn-accent btn-xs"
-									disabled={!parsed.data || parsed.errors.length > 0}
-									onClick={exportPDF}>
-									📄
 								</button>
 							</div>
 						</div>

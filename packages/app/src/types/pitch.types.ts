@@ -4,12 +4,14 @@ export type SlideBlock =
 	| { type: 'title'; text: string }
 	| { type: 'subtitle'; text: string }
 	| { type: 'text'; text: string }
-	| { type: 'bullets'; items: string[] }
+	| {
+			type: 'bullets';
+			items: { emoji?: string; title?: string; description?: string }[];
+	  }
 	| { type: 'highlight'; text: string; subtext: string };
 
 export type SlideLayout = {
 	kicker?: string;
-	title?: string;
 	blocks: SlideBlock[];
 };
 
@@ -21,14 +23,30 @@ export type TitleSlide = {
 	audience: string;
 };
 
-export type ProblemSlide = string[];
+export type Problem = {
+	emoji: string;
+	title: string;
+	description: string;
+	impact: string;
+	severity: string;
+	userType: string;
+};
 
-export type SolutionSlide = {
+export type ProblemsSlide = Problem[];
+
+export type Step = {
+	step: number;
+	emoji: string;
+	title: string;
 	description: string;
 };
 
+export type SolutionSlide = Step[];
+
+export type Feature = { emoji: string; title: string; description: string };
+
 export type ProductSlide = {
-	features: string[];
+	features: Feature[];
 };
 
 export type PricingSlide = {
@@ -41,8 +59,8 @@ export type PricingSlide = {
 
 export type PitchDeck = {
 	title: TitleSlide;
-	problem: ProblemSlide;
-	solution: SolutionSlide;
+	problems: ProblemsSlide;
+	solutions: SolutionSlide;
 	product: ProductSlide;
 	pricing: PricingSlide;
 };

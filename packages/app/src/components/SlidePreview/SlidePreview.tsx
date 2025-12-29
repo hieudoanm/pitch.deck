@@ -4,31 +4,58 @@ import { FC, ReactNode } from 'react';
 export const mapYamlToSlides = (data: PitchDeck): SlideLayout[] => [
 	{
 		kicker: 'Introduction',
-		title: data.title.product,
 		blocks: [
+			{ type: 'title', text: data.title.product },
 			{ type: 'subtitle', text: data.title.tagline },
 			{ type: 'text', text: data.title.audience },
 		],
 	},
 	{
-		kicker: 'Problem',
-		title: 'Problem',
-		blocks: [{ type: 'bullets', items: data.problem }],
+		kicker: 'Problems',
+		blocks: [
+			{ type: 'title', text: 'Problems' },
+			{
+				type: 'bullets',
+				items: data.problems.map((p) => ({
+					emoji: p.emoji,
+					title: p.title,
+					description: p.description,
+				})),
+			},
+		],
 	},
 	{
 		kicker: 'Solution',
-		title: 'Solution',
-		blocks: [{ type: 'text', text: data.solution.description }],
+		blocks: [
+			{ type: 'title', text: 'Solution' },
+			{
+				type: 'bullets',
+				items: data.solutions.map((step) => ({
+					emoji: step.emoji,
+					title: step.title,
+					description: step.description,
+				})),
+			},
+		],
 	},
 	{
 		kicker: 'Product',
-		title: 'Product',
-		blocks: [{ type: 'bullets', items: data.product.features }],
+		blocks: [
+			{ type: 'title', text: 'Product' },
+			{
+				type: 'bullets',
+				items: data.product.features.map((feature) => ({
+					emoji: feature.emoji,
+					title: feature.title,
+					description: feature.description,
+				})),
+			},
+		],
 	},
 	{
 		kicker: 'Business Model',
-		title: 'Pricing',
 		blocks: [
+			{ type: 'title', text: 'Pricing' },
 			{
 				type: 'highlight',
 				text: `${data.pricing.symbol}${data.pricing.amount}`,
@@ -62,26 +89,19 @@ export const SlidePreview: FC<{ slide: SlideLayout; index: number }> = ({
 
 			{/* kicker */}
 			{slide.kicker && (
-				<div className="mb-6 text-lg font-semibold text-purple-400 uppercase">
+				<div className="mb-8 text-lg font-semibold text-purple-400 uppercase">
 					<Text>{slide.kicker}</Text>
 				</div>
 			)}
 
-			{/* deck title */}
-			{slide.title && (
-				<div className="mb-6 text-6xl leading-tight font-bold text-white">
-					<Text>{slide.title}</Text>
-				</div>
-			)}
-
-			<div className="flex flex-col gap-6">
+			<div className="flex flex-col">
 				{slide.blocks.map((b, i) => {
 					switch (b.type) {
 						case 'title':
 							return (
 								<div
 									key={i}
-									className="text-5xl leading-tight font-bold text-white">
+									className="mb-8 text-5xl leading-tight font-bold text-white">
 									<Text>{b.text}</Text>
 								</div>
 							);
@@ -90,7 +110,7 @@ export const SlidePreview: FC<{ slide: SlideLayout; index: number }> = ({
 							return (
 								<div
 									key={i}
-									className="text-3xl leading-snug font-medium text-neutral-300">
+									className="mb-8 text-3xl leading-snug font-medium text-neutral-300">
 									<Text>{b.text}</Text>
 								</div>
 							);
@@ -106,10 +126,23 @@ export const SlidePreview: FC<{ slide: SlideLayout; index: number }> = ({
 
 						case 'bullets':
 							return (
-								<ul className="list-inside list-disc space-y-4 pl-10 text-2xl leading-relaxed text-neutral-200 marker:text-purple-400">
+								<ul className="space-y-6">
 									{b.items.map((item, j) => (
-										<li key={j}>
-											<Text>{item}</Text>
+										<li key={j} className="flex items-center items-start gap-4">
+											{/* Emoji */}
+											<span className="text-3xl">{item.emoji}</span>
+											<div className="flex flex-col gap-2">
+												{/* Title */}
+												<div className="text-2xl font-bold text-white">
+													<Text>{item.title}</Text>
+												</div>
+												{/* Description */}
+												{item.description && (
+													<div className="text-xl text-neutral-300">
+														<Text>{item.description}</Text>
+													</div>
+												)}
+											</div>
 										</li>
 									))}
 								</ul>
