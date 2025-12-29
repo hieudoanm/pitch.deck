@@ -1,35 +1,4 @@
-export const INITIAL_THEME = 'night';
-
-export const THEMES: { group: string; theme: string }[] = [
-	// 🌤 Light themes
-	{ group: 'Light', theme: 'light' },
-	{ group: 'Light', theme: 'acid' },
-	{ group: 'Light', theme: 'bumblebee' },
-	{ group: 'Light', theme: 'corporate' },
-	{ group: 'Light', theme: 'cupcake' },
-	{ group: 'Light', theme: 'emerald' },
-	{ group: 'Light', theme: 'garden' },
-	{ group: 'Light', theme: 'lofi' },
-	{ group: 'Light', theme: 'pastel' },
-	{ group: 'Light', theme: 'wireframe' },
-
-	// 🌙 Dark themes
-	{ group: 'Dark', theme: 'coffee' },
-	{ group: 'Dark', theme: 'dark' },
-	{ group: 'Dark', theme: 'synthwave' },
-	{ group: 'Dark', theme: 'dracula' },
-	{ group: 'Dark', theme: 'luxury' },
-	{ group: 'Dark', theme: 'night' },
-	{ group: 'Dark', theme: 'forest' },
-
-	// 🎨 Colorful / fun
-	{ group: 'Fun', theme: 'aqua' },
-	{ group: 'Fun', theme: 'retro' },
-	{ group: 'Fun', theme: 'cyberpunk' },
-	{ group: 'Fun', theme: 'valentine' },
-];
-
-export const INITIAL_CONTENT: string = `title:
+title:
   product: PitchDeckGen
   tagline: Create stunning pitch decks in minutes
   audience: Startup founders & entrepreneurs, early-stage startups, and solo founders
@@ -113,4 +82,3 @@ pricing:
       amount: 9.99
       frequency: one-time
       description: Unlimited pitch decks with a single payment
-`;

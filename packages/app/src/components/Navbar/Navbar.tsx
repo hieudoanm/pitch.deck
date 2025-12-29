@@ -1,4 +1,5 @@
 import { INITIAL_THEME, THEMES } from '@pitch/constants/app';
+import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
 
 export const Navbar: FC = () => {
@@ -15,7 +16,9 @@ export const Navbar: FC = () => {
 	return (
 		<div className="navbar border-base-300 border-b px-6">
 			<div className="flex-1">
-				<span className="text-lg font-bold">Pitch Deck Generator</span>
+				<Link href="/">
+					<span className="text-lg font-bold">Pitch Deck Generator</span>
+				</Link>
 			</div>
 
 			<div className="flex-none">

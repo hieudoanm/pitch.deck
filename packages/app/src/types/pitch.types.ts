@@ -1,5 +1,4 @@
 // Layout
-// Layout
 
 export type SlideBlock =
 	| { type: 'title'; text: string }
@@ -51,7 +50,11 @@ export type Problem = {
 	userType: string;
 };
 
-export type ProblemsSlide = Problem[];
+export type ProblemsSlide = {
+	title: string;
+	subtitle: string;
+	items: Problem[];
+};
 
 export type Step = {
 	step: number;
@@ -60,11 +63,13 @@ export type Step = {
 	description: string;
 };
 
-export type SolutionSlide = Step[];
+export type SolutionSlide = { title: string; subtitle: string; items: Step[] };
 
 export type Feature = { emoji: string; title: string; description: string };
 
 export type ProductSlide = {
+	title: string;
+	subtitle: string;
 	features: Feature[];
 };
 
@@ -77,6 +82,8 @@ export type PricingPlan = {
 };
 
 export type PricingSlide = {
+	title: string;
+	subtitle: string;
 	model: 'one-time' | 'subscription' | 'freemium' | 'usage-based';
 	currency: string;
 	plans: PricingPlan[];

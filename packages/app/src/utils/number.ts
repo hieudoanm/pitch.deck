@@ -3,8 +3,4 @@ export const formatCurrency = (
 	currency: string,
 	locale = 'en-US'
 ) =>
-	new Intl.NumberFormat(locale, {
-		style: 'currency',
-		currency,
-		minimumFractionDigits: 2,
-	}).format(amount);
+	new Intl.NumberFormat(locale, { style: 'currency', currency }).format(amount);
