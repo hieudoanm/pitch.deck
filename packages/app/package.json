@@ -34,9 +34,9 @@
 		"test": "jest"
 	},
 	"dependencies": {
-		"@capacitor/android": "8.0.0",
-		"@capacitor/core": "8.0.0",
-		"@capacitor/ios": "8.0.0",
+		"@capacitor/android": "8.0.1",
+		"@capacitor/core": "8.0.1",
+		"@capacitor/ios": "8.0.1",
 		"@codemirror/lang-yaml": "6.1.2",
 		"@uiw/react-codemirror": "4.25.4",
 		"html2canvas": "1.4.1",
@@ -47,7 +47,7 @@
 		"yaml": "2.8.2"
 	},
 	"devDependencies": {
-		"@capacitor/cli": "8.0.0",
+		"@capacitor/cli": "8.0.1",
 		"@eslint/eslintrc": "3.3.3",
 		"@tailwindcss/postcss": "4.1.18",
 		"@tauri-apps/cli": "2.9.6",
