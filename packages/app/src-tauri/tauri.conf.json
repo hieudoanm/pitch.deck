@@ -1,8 +1,8 @@
 {
 	"$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-	"productName": "pitch",
+	"productName": "pitch.deck",
 	"version": "0.1.0",
-	"identifier": "io.github.hieudoanm.pitch",
+	"identifier": "io.github.hieudoanm.pitch.deck",
 	"build": {
 		"frontendDist": "../../../docs",
 		"devUrl": "http://localhost:3000",

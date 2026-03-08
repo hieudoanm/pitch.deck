@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next';
 
 const NODE_ENV = process.env.NODE_ENV ?? 'development';
-const BASE_PATH = 'pitch';
+const BASE_PATH = 'pitch.deck';
 
 const nextConfig: NextConfig = {
 	trailingSlash: true,
