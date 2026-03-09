@@ -1,12 +1,13 @@
 import type { NextConfig } from 'next';
 
 const NODE_ENV = process.env.NODE_ENV ?? 'development';
-const BASE_PATH = 'pitch.deck';
 
 const nextConfig: NextConfig = {
 	trailingSlash: true,
+	reactCompiler: true,
 	reactStrictMode: true,
-	basePath: NODE_ENV === 'development' ? '' : `/${BASE_PATH}`,
+	images: { unoptimized: true },
+	basePath: NODE_ENV === 'development' ? '' : '/pitch.deck',
 	output: NODE_ENV === 'development' ? 'standalone' : 'export',
 	distDir: NODE_ENV === 'development' ? '.next' : '../../docs',
 };
